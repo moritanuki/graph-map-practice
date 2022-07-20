@@ -1,7 +1,7 @@
 <template>
  <div class="mapVue">
     <h3>Map</h3>
-    <button @click="mapCreate">Plot Line</button>
+    <button>Plot Line</button>
     <div id="map"></div>
  </div>
 </template>
@@ -14,6 +14,9 @@
 
     export default {
         name: 'mapVue',
+        mounted() {
+            this.mapCreate()
+        },
         methods: {
             mapCreate() {
                 new Map({
