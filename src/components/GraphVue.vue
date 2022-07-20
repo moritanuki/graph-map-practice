@@ -13,30 +13,73 @@ import shipData1 from '../assets/json/ship-data1.json'
 export default {
   data() {
     return {
-      chartOptions: {},
-      plotData: []
+      chartOptions: {}
     }
   },
   methods: {
-    dataFetch() {
+    dataFetch(dataType) {
       let plotData = []
-      console.log(shipData1.NormalTrendData[0].UTC_DATE)
 
       shipData1.NormalTrendData.forEach((data) => {
+        const date = Date.parse(data.UTC_DATE)
         plotData.push(
-          [data.ME_LOAD]
+          [date ,data[dataType]]
         )
       })
-      return this.plotData = plotData
+      return plotData
     },
     dataPlot() {
-      this.dataFetch()
+      const ME_LOAD = this.dataFetch('ME_LOAD')
+      const ME_REV = this.dataFetch('ME_REV')
+      const OG_SPEED = this.dataFetch('OG_SPEED')
+      const FOC_DAY = this.dataFetch('FOC_DAY')
 
-      return this.chartOptions = {
+      this.chartOptions = {
         series: [
           {
-            data: this.plotData,
-            pointStart: Date.parse(shipData1.NormalTrendData[0].UTC_DATE),
+            data: ME_LOAD,
+            lineWidth: 1.3,
+          marker: {
+            enabled: true, // falseでマーカーを非表示
+            radius: 2 // マーカーの大きさ
+          },
+          tooltip: {
+            useHTML: true,
+            yDecimals: 2, // 小数点以下の桁数
+            valueSuffix: '%' // 単位
+          },
+          pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
+          },
+          {
+            data: ME_REV,
+            lineWidth: 1.3,
+          marker: {
+            enabled: true, // falseでマーカーを非表示
+            radius: 2 // マーカーの大きさ
+          },
+          tooltip: {
+            useHTML: true,
+            yDecimals: 2, // 小数点以下の桁数
+            valueSuffix: '%' // 単位
+          },
+          pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
+          },
+          {
+            data: OG_SPEED,
+            lineWidth: 1.3,
+          marker: {
+            enabled: true, // falseでマーカーを非表示
+            radius: 2 // マーカーの大きさ
+          },
+          tooltip: {
+            useHTML: true,
+            yDecimals: 2, // 小数点以下の桁数
+            valueSuffix: '%' // 単位
+          },
+          pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
+          },
+          {
+            data: FOC_DAY,
             lineWidth: 1.3,
           marker: {
             enabled: true, // falseでマーカーを非表示
@@ -96,7 +139,7 @@ export default {
         },
         rangeSelector: {
           enabled: true,
-          selected: 1,
+          selected: 3,
           buttonTheme: {
             zIndex: 1
           },
