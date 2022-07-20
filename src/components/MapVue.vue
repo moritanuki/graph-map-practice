@@ -7,13 +7,17 @@
 </template>
 
 <script>
+    // OpenLayersのライブラリ
     import Map from 'ol/Map'
     import View from 'ol/View'
     import TileLayer from 'ol/layer/Tile'
     import Feature from 'ol/Feature'
-    import {Point} from 'ol/geom'
+    import {LineString, Point} from 'ol/geom'
     import {OSM, Vector as VectorSource} from 'ol/source'
     import {Vector as VectorLayer} from 'ol/layer'
+
+    // 描画情報
+    // import shipData1 from '../assets/json/ship-data1.json'
 
     export default {
         name: 'mapVue',
@@ -45,13 +49,22 @@
                 // ポイントを生成
                 const pointFeature = new Feature(new Point([0, 0]))
 
-                // ラインを描画
+                // ラインを生成
+                const lineFeature = new Feature(
+                    new LineString([
+                        [0, 0],
+                        [0, 3e6]
+                    ])
+                )
+
+                // 図形生成
                 const vector = new VectorLayer({
                     source: new VectorSource({
-                        features: [pointFeature]
+                        features: [pointFeature, lineFeature]
                     })
                 })
 
+                // 地図に描画
                 this.map.addLayer(vector)
             }
         }
