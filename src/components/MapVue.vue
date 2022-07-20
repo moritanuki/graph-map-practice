@@ -1,25 +1,34 @@
 <template>
  <div class="mapVue">
     <h3>Map</h3>
-    <button>Plot Line</button>
+    <button @click="plotLine">Plot Line</button>
     <div id="map"></div>
  </div>
 </template>
 
 <script>
     import Map from 'ol/Map'
-    import OSM from 'ol/source/OSM'
     import View from 'ol/View'
     import TileLayer from 'ol/layer/Tile'
+    import Feature from 'ol/Feature'
+    import {Point} from 'ol/geom'
+    import {OSM, Vector as VectorSource} from 'ol/source'
+    import {Vector as VectorLayer} from 'ol/layer'
 
     export default {
         name: 'mapVue',
+        data() {
+            return {
+                map: new Map()
+            }
+        },
         mounted() {
             this.mapCreate()
         },
         methods: {
             mapCreate() {
-                new Map({
+                // 地図を描画
+                this.map = new Map({
                     target: 'map',
                     layers: [
                         new TileLayer({
@@ -31,6 +40,19 @@
                         zoom: 2,
                     })
                 })
+            },
+            plotLine() {
+                // ポイントを生成
+                const pointFeature = new Feature(new Point([0, 0]))
+
+                // ラインを描画
+                const vector = new VectorLayer({
+                    source: new VectorSource({
+                        features: [pointFeature]
+                    })
+                })
+
+                this.map.addLayer(vector)
             }
         }
     }
