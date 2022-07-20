@@ -60,7 +60,7 @@ export default {
           tooltip: {
             useHTML: true,
             yDecimals: 2, // 小数点以下の桁数
-            valueSuffix: '%' // 単位
+            valueSuffix: 'rpm' // 単位
           },
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           },
@@ -74,7 +74,7 @@ export default {
           tooltip: {
             useHTML: true,
             yDecimals: 2, // 小数点以下の桁数
-            valueSuffix: '%' // 単位
+            valueSuffix: 'knot' // 単位
           },
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           },
@@ -88,7 +88,7 @@ export default {
           tooltip: {
             useHTML: true,
             yDecimals: 2, // 小数点以下の桁数
-            valueSuffix: '%' // 単位
+            valueSuffix: 'MT/day' // 単位
           },
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           }
