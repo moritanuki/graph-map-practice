@@ -1,4 +1,4 @@
-# graph_map_morita
+# graph_map_practice
 
 ## Project setup
 ```
