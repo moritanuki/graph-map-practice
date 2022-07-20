@@ -37,6 +37,7 @@ export default {
       this.chartOptions = {
         series: [
           {
+            name: 'ME_LOAD',
             data: ME_LOAD,
             lineWidth: 1.3,
           marker: {
@@ -51,6 +52,7 @@ export default {
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           },
           {
+            name: 'ME_REV',
             data: ME_REV,
             lineWidth: 1.3,
           marker: {
@@ -65,6 +67,7 @@ export default {
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           },
           {
+            name: 'OG_SPEED',
             data: OG_SPEED,
             lineWidth: 1.3,
           marker: {
@@ -79,6 +82,7 @@ export default {
           pointFormat: '<tr><td><b><span style="color:{series.color}">{series.name}</span></b></td><td>{point.y}</td></tr>'
           },
           {
+            name: 'FOC_DAY',
             data: FOC_DAY,
             lineWidth: 1.3,
           marker: {
