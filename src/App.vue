@@ -1,27 +1,26 @@
 <template>
   <div id="app">
-    <GraphVue msg="TrendGraph"/>
+    <graphVue></graphVue>
   </div>
 </template>
 
 <script>
-import GraphVue from './components/GraphVue.vue'
+import GraphVue from "./components/GraphVue";
 
 export default {
-  name: 'App',
+  name: "app",
   components: {
-    GraphVue
+    graphVue: GraphVue
+  },
+  methods: {
+    handler() {
+      var args = arguments;
+      for (var arg of args) {
+        if (arg instanceof Function) {
+          arg()
+        }
+      }
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
