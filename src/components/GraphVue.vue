@@ -1,5 +1,5 @@
 <template>
-  <div class="graph">
+  <div id="graph">
     <h3>TrendGraph</h3>
     <button @click="dataPlot">Plot Chart</button>
     <highcharts :constructorType="'stockChart'" class="hc" :options="chartOptions" ref="chart"></highcharts>
