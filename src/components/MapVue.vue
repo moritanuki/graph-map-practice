@@ -19,7 +19,7 @@
 
     // 描画情報
     import shipData1 from '../assets/json/ship-data1.json'
-    // import shipData2 from '../assets/json/ship-data2.json'
+    import shipData2 from '../assets/json/ship-data2.json'
     import ship from '../assets/img/ship.png'
     import shipBlue from '../assets/img/ship_blue.png'
 
@@ -164,21 +164,34 @@
             },
             plotLine() {
                 // 地図に描画
+                console.log(shipData2)
 
                 // ポイント
-                const points = this.createPoints(shipData1.SpasDailyData)
-                const startPoint = points[0]
-                const finishPoint = points[points.length-1]
+                const points1 = this.createPoints(shipData1.SpasDailyData)
+                const startPoint1 = points1[0]
+                const finishPoint1 = points1[points1.length-1]
+
+                const points2 = this.createPoints(shipData2.NormalTrendData)
+                const startPoint2 = points2[0]
+                const finishPoint2 = points2[points2.length-1]
 
                 //図形生成
-                const vector = this.generateVector(shipData1.SpasDailyData)
-                const vectorShip = this.generateShipVector(startPoint, points[1], ship)
-                const vectorShipBlue = this.generateShipVector(points[points.length-2], finishPoint, shipBlue)
+                const vector1 = this.generateVector(points1)
+                const vectorShip1 = this.generateShipVector(startPoint1, points1[1], ship)
+                const vectorShipBlue1 = this.generateShipVector(points1[points1.length-2], finishPoint1, shipBlue)
+
+                const vector2 = this.generateVector(points2)
+                const vectorShip2 = this.generateShipVector(startPoint2, points2[1], ship)
+                const vectorShipBlue2 = this.generateShipVector(points2[points2.length-2], finishPoint2, shipBlue)
 
                 // 描画
-                this.map.addLayer(vector)
-                this.map.addLayer(vectorShip)
-                this.map.addLayer(vectorShipBlue)
+                this.map.addLayer(vector1)
+                this.map.addLayer(vectorShip1)
+                this.map.addLayer(vectorShipBlue1)
+
+                this.map.addLayer(vector2)
+                this.map.addLayer(vectorShip2)
+                this.map.addLayer(vectorShipBlue2)
             }
         }
     }
