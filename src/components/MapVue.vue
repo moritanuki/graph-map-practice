@@ -68,7 +68,6 @@
                     // 方角による表記変換
                     if(LONEW === 'W') {
                         LONDEGMIN = 360 - LONDEGMIN
-
                     }
                     if(LATNS === 'S') {
                         //pass
@@ -115,14 +114,30 @@
 
                 return features
             },
+            calculateDirection(startPoint, finishPoint) {
+                // 船の方角計算
+                let radian = Math.atan2(
+                    finishPoint[1] - startPoint[1],
+                    finishPoint[0] - startPoint[0]
+                )
+
+                if(radian < 0) {
+                    radian += 1
+                }
+
+                return radian
+            },
             plotLine() {
 
                 const points = this.createPoints()
+                const len = points.length
+                const startPoint = points[0]
+                const finishPoint = points[len-1]
                 
                 const pointFeatures = this.generateFeatures(points, 'Point')
                 const lineFeatures = this.generateFeatures(points, 'LineString')
-                const shipFeature = this.generateFeatures([points[points.length - 1]], 'Point')
-                const shipBlueFeature = this.generateFeatures([points[0]], 'Point')
+                const shipFeature = this.generateFeatures([startPoint], 'Point')
+                const shipBlueFeature = this.generateFeatures([finishPoint], 'Point')
                 
                 // 図形生成
                 const vector = new VectorLayer({
@@ -131,6 +146,10 @@
                     }),
                 })
 
+                const shipDirection = this.calculateDirection(startPoint, points[1])
+                const shipBlueDirection = this.calculateDirection(points[len-2], finishPoint)
+                console.log(shipBlueDirection)
+
                 // 始点を船アイコンで描画
                 const vectorShip = new VectorLayer({
                     source: new VectorSource({
@@ -138,19 +157,21 @@
                     }),
                     style: new Style({
                         image: new Icon({
-                            src: ship
+                            src: ship,
+                            rotation: shipDirection
                         })
                     })
                 })
 
-                // 始点を青い船アイコンで描画
+                // 終点を青い船アイコンで描画
                 const vectorShipBlue = new VectorLayer({
                     source: new VectorSource({
                         features: shipBlueFeature
                     }),
                     style: new Style({
                         image: new Icon({
-                            src: shipBlue
+                            src: shipBlue,
+                            rotation: shipBlueDirection
                         })
                     })
                 })
