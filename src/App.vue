@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <graphVue></graphVue>
-    <mapVue></mapVue>
+    <button @click="plot">Plot Chart & Line</button>
+    <graphVue ref="graph"></graphVue>
+    <mapVue ref="map"></mapVue>
   </div>
 </template>
 
@@ -23,6 +24,10 @@ export default {
           arg()
         }
       }
+    },
+    plot() {
+      this.$refs.graph.dataPlot()
+      this.$refs.map.plotLine()
     }
   }
 }
