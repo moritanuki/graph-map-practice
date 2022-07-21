@@ -65,10 +65,11 @@
 
                     // 方角による表記変換
                     if(LONEW === 'W') {
-                        LONDEGMIN = -(LONDEGMIN)
+                        LONDEGMIN = 360 - LONDEGMIN
+
                     }
                     if(LATNS === 'S') {
-                        LATDEGMIN = -(LATDEGMIN)
+                        //pass
                     }
 
                     points.push([LONDEGMIN, LATDEGMIN] )
@@ -77,6 +78,7 @@
                 return points
             },
             generateFeatures(points, featureType) {
+                // 図形クラス生成
                 let features = []
 
                 switch(featureType) {
@@ -99,10 +101,7 @@
                             if(index !== 0 || index % 2 !== 0) {
                                 features.push(
                                     new Feature(
-                                        new LineString([
-                                            pre,
-                                            data
-                                        ])
+                                        new LineString([pre, data])
                                     )
                                 )
                             }
