@@ -51,7 +51,7 @@
                     })
                 })
             },
-            calculateMiddlePoint(x1, y1, x2, y2) {
+            calculateMiddleY(x1, y1, x2, y2) {
                 // y軸計算
                 let x, y, a, b
 
@@ -90,7 +90,7 @@
 
                     // 西経→東経
                     if(preLONEW === 'W' && LONEW === 'E') {
-                        const y = this.calculateMiddlePoint(
+                        const y = this.calculateMiddleY(
                                 preLONDEGMIN, preLATDEGMIN, LONDEGMIN, LATDEGMIN
                             )
                         points.push([360, y], [0, y])
@@ -144,16 +144,9 @@
 
                 return features
             },
-            calculateDirection(startPoint, finishPoint) {
+            calculateDirection(lon1, lat1, lon2, lat2) {
                 // 船の方角計算
-                let radian = Math.atan2(
-                    finishPoint[1] - startPoint[1],
-                    finishPoint[0] - startPoint[0]
-                )
-
-                if(radian < 0) {
-                    radian += 1
-                }
+                const radian = Math.atan2(lat2 - lat1, lon2 - lon1)
 
                 return radian
             },
@@ -175,7 +168,12 @@
                 const shipFeature = this.generateFeatures([startPoint], 'Point')
 
                 // 船アイコンの角度調整
-                const shipDirection = this.calculateDirection(startPoint, finishPoint)
+                const shipDirection = this.calculateDirection(
+                    startPoint[0],
+                    startPoint[1],
+                    finishPoint[0],
+                    finishPoint[1]
+                )
 
                 const vectorShip = new VectorLayer({
                     source: new VectorSource({
