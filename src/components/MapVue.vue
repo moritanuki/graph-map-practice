@@ -76,12 +76,12 @@
 
                 return points
             },
-            generateFeatures(shapes, featureType) {
+            generateFeatures(points, featureType) {
                 let features = []
 
                 switch(featureType) {
-                    case 'Point':
-                        shapes.forEach((data) => {
+                    case 'Point': {
+                        points.forEach((data) => {
                             features.push(
                                 new Feature(
                                     new Point(
@@ -90,38 +90,41 @@
                                 )
                             )
                         })
+                    }
                         break
-                    case 'LineString':
-                        shapes.forEach((data) => {
-                            features.push(
-                                new Feature(
-                                    new LineString(
-                                    data
+                    case 'LineString': {
+                        let pre = []
+
+                        points.forEach((data, index) => {
+                            if(index !== 0 || index % 2 !== 0) {
+                                features.push(
+                                    new Feature(
+                                        new LineString([
+                                            pre,
+                                            data
+                                        ])
                                     )
                                 )
-                            )
+                            }
+                            pre = data
                         })
+                    }
                         break
                 }
 
                 return features
             },
             plotLine() {
-                
-                const pointFeatures = this.generateFeatures(this.createPoint(), 'Point')
 
-                // ラインを生成
-                // const lineFeature = new Feature(
-                //     new LineString([
-                //         [1e4, -2e2],
-                //         [22222, 3e6]
-                //     ])
-                // )
+                const points = this.createPoint()
+                
+                const pointFeatures = this.generateFeatures(points, 'Point')
+                const lineFeatures = this.generateFeatures(points, 'LineString')
 
                 // 図形生成
                 const vector = new VectorLayer({
                     source: new VectorSource({
-                        features: pointFeatures
+                        features: [...pointFeatures, ...lineFeatures]
                     })
                 })
 
