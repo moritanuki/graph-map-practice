@@ -19,6 +19,7 @@
 
     // 描画情報
     import shipData1 from '../assets/json/ship-data1.json'
+    // import shipData2 from '../assets/json/ship-data2.json'
     import ship from '../assets/img/ship.png'
     import shipBlue from '../assets/img/ship_blue.png'
 
@@ -50,11 +51,11 @@
                     })
                 })
             },
-            createPoints() {
+            createPoints(shipData) {
                 // ポイントを生成
                 let points = []
 
-                shipData1.SpasDailyData.forEach((data) => {
+                shipData.forEach((data) => {
                     let LONDEGMIN = data.LONDEGMIN //経度
                     const LONEW = data.LONEW
                     let LATDEGMIN = data.LATDEGMIN //緯度
@@ -127,56 +128,54 @@
 
                 return radian
             },
-            plotLine() {
-
-                const points = this.createPoints()
-                const len = points.length
-                const startPoint = points[0]
-                const finishPoint = points[len-1]
-                
+            generateVector(points) {
+                // 点と線の図形生成
                 const pointFeatures = this.generateFeatures(points, 'Point')
                 const lineFeatures = this.generateFeatures(points, 'LineString')
-                const shipFeature = this.generateFeatures([startPoint], 'Point')
-                const shipBlueFeature = this.generateFeatures([finishPoint], 'Point')
                 
-                // 図形生成
                 const vector = new VectorLayer({
                     source: new VectorSource({
                         features: [...pointFeatures, ...lineFeatures]
                     }),
                 })
 
-                const shipDirection = this.calculateDirection(startPoint, points[1])
-                const shipBlueDirection = this.calculateDirection(points[len-2], finishPoint)
-                console.log(shipBlueDirection)
+                return vector
+            },
+            generateShipVector(startPoint, finishPoint, shipImg) {
+                // 船アイコンの生成
+                const shipFeature = this.generateFeatures([startPoint], 'Point')
 
-                // 始点を船アイコンで描画
+                // 船アイコンの角度調整
+                const shipDirection = this.calculateDirection(startPoint, finishPoint)
+
                 const vectorShip = new VectorLayer({
                     source: new VectorSource({
                         features: shipFeature
                     }),
                     style: new Style({
                         image: new Icon({
-                            src: ship,
+                            src: shipImg,
                             rotation: shipDirection
                         })
                     })
                 })
 
-                // 終点を青い船アイコンで描画
-                const vectorShipBlue = new VectorLayer({
-                    source: new VectorSource({
-                        features: shipBlueFeature
-                    }),
-                    style: new Style({
-                        image: new Icon({
-                            src: shipBlue,
-                            rotation: shipBlueDirection
-                        })
-                    })
-                })
-
+                return vectorShip
+            },
+            plotLine() {
                 // 地図に描画
+
+                // ポイント
+                const points = this.createPoints(shipData1.SpasDailyData)
+                const startPoint = points[0]
+                const finishPoint = points[points.length-1]
+
+                //図形生成
+                const vector = this.generateVector(shipData1.SpasDailyData)
+                const vectorShip = this.generateShipVector(startPoint, points[1], ship)
+                const vectorShipBlue = this.generateShipVector(points[points.length-2], finishPoint, shipBlue)
+
+                // 描画
                 this.map.addLayer(vector)
                 this.map.addLayer(vectorShip)
                 this.map.addLayer(vectorShipBlue)
