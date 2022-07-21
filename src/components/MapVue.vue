@@ -51,9 +51,23 @@
                     })
                 })
             },
+            calculateMiddlePoint(x1, y1, x2, y2) {
+                // y軸計算
+                let x, y, a, b
+
+                x = 180
+                a = (y2 - y1) / (x2 - x1)
+                b = y1 - a * x1
+                y = a * x + b
+
+                return y
+            },
             createPoints(shipData) {
                 // ポイントを生成
                 let points = []
+                let preLONEW = ''
+                let preLONDEGMIN = ''
+                let preLATDEGMIN = ''
 
                 shipData.forEach((data) => {
                     let LONDEGMIN = data.LONDEGMIN //経度
@@ -67,12 +81,23 @@
                     }
 
                     // 方角による表記変換
+                    if(LATNS === 'S') {
+                        LATDEGMIN =  -(LATDEGMIN)
+                    }
                     if(LONEW === 'W') {
                         LONDEGMIN = 360 - LONDEGMIN
                     }
-                    if(LATNS === 'S') {
-                        //pass
+
+                    // 西経→東経
+                    if(preLONEW === 'W' && LONEW === 'E') {
+                        const y = this.calculateMiddlePoint(
+                                preLONDEGMIN, preLATDEGMIN, LONDEGMIN, LATDEGMIN
+                            )
+                        points.push([360, y], [0, y])
                     }
+                    preLONEW = LONEW
+                    preLONDEGMIN = LONDEGMIN
+                    preLATDEGMIN = LATDEGMIN
 
                     points.push([LONDEGMIN, LATDEGMIN] )
                 })
@@ -101,11 +126,15 @@
 
                         points.forEach((data, index) => {
                             if(index !== 0 || index % 2 !== 0) {
-                                features.push(
-                                    new Feature(
-                                        new LineString([pre, data])
-                                    )
+
+                                // 経線の不要ラインは除く
+                                if(pre[0] !== 360) {
+                                    features.push(
+                                        new Feature(
+                                            new LineString([pre, data])
+                                        )
                                 )
+                                }
                             }
                             pre = data
                         })
@@ -164,7 +193,6 @@
             },
             plotLine() {
                 // 地図に描画
-                console.log(shipData2)
 
                 // ポイント
                 const points1 = this.createPoints(shipData1.SpasDailyData)
