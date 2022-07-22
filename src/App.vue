@@ -1,16 +1,20 @@
 <template>
   <div id="app">
-    <graphVue></graphVue>
+    <button @click="plot">Plot Chart & Line</button>
+    <graphVue ref="graph"></graphVue>
+    <mapVue ref="map"></mapVue>
   </div>
 </template>
 
 <script>
-import GraphVue from "./components/GraphVue";
+import GraphVue from "./components/GraphVue"
+import MapVue from "./components/MapVue"
 
 export default {
   name: "app",
   components: {
-    graphVue: GraphVue
+    graphVue: GraphVue,
+    mapVue: MapVue
   },
   methods: {
     handler() {
@@ -20,6 +24,10 @@ export default {
           arg()
         }
       }
+    },
+    plot() {
+      this.$refs.graph.dataPlot()
+      this.$refs.map.plotLine()
     }
   }
 }
